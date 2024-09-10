@@ -7,7 +7,7 @@ Configration is done through environment variables, se below list for supported 
 
 | Name   | Type   | Description   | Default   |
 |---------------- | --------------- | --------------- | --------------- |
-| SERVERS   | String   | A list of the servers to load balance between. Seperated with comma (,)   | server1, server2 |
-| HOST   | String   | The host to run go-balancer service on | localhost |
-| PORT   | String   | The port to run go-balancer service on | 8080 |
+| SERVERS   | String  | A list of the servers to load balance between. Seperated with comma (,) | server1, server2 |
+| HOSTNAME  | String  | The host to run go-balancer service on | localhost |
+| PORT      | String  | The port to run go-balancer service on | 8080 |
 

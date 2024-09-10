@@ -8,8 +8,8 @@ import (
 
 func main() {
 	serverList := env.GetString("SERVERS", "server1, server2")
-	host := env.GetString("HOST", "localhost")
+	hostname := env.GetString("HOSTNAME", "localhost")
 	port := env.GetString("PORT", "8080")
-	host = fmt.Sprint(host + ":" + port)
+  host := fmt.Sprint(hostname + ":" + port)
 	server.Start(host)
 }
