@@ -10,6 +10,6 @@ func main() {
 	serverList := env.GetString("SERVERS", "server1, server2")
 	hostname := env.GetString("HOSTNAME", "localhost")
 	port := env.GetString("PORT", "8080")
-  host := fmt.Sprint(hostname + ":" + port)
+	host := fmt.Sprint(hostname + ":" + port)
 	server.Start(host)
 }
