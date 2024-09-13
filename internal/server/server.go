@@ -17,21 +17,17 @@ func (s *Server) loadBalanceHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		chosenServer, err := s.lb.GetServer()
 		if err != nil {
-			slog.Error("Error", "error", err.Error())
+			slog.Error("Internal error", "message", err.Error())
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 		}
-		slog.Info("Forwarding to server", "server", chosenServer)
+		slog.Info("Forwarding to ", "server", chosenServer)
 	}
-}
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	slog.Info("Handeled request", "host", r.Host)
-	w.WriteHeader(http.StatusOK)
 }
 
 func (s *Server) Configure(algorithm string, serverlist string) error {
 	servers := strings.Split(serverlist, ", ")
 	lb, err := loadbalancer.GetLoadBalancer(algorithm, servers)
+
 	if err != nil {
 		slog.Error("Error when configuring server", "error", err.Error())
 		return err
