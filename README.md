@@ -1,5 +1,5 @@
 # go-balancer
-A simple , lightweight load balancer written in Go
+A simple , lightweight HTTP load balancer written in Go
 
 # configuration
 
