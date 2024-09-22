@@ -67,7 +67,6 @@ func relay(w http.ResponseWriter, r *http.Request, destination string) {
 }
 
 func (s *Server) Start(host string) error {
-	slog.Info("Starting up", "host", host)
 	http.HandleFunc("/", s.loadBalanceHandler())
 	http.ListenAndServe(host, nil)
 	return nil
