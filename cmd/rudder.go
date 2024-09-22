@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/zeidlitz/goround/internal/env"
-	"github.com/zeidlitz/goround/internal/server"
+	"github.com/zeidlitz/rudder/internal/env"
+	"github.com/zeidlitz/rudder/internal/server"
 )
 
 func main() {

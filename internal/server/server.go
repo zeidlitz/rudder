@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/zeidlitz/goround/loadbalancer"
+	"github.com/zeidlitz/rudder/loadbalancer"
 )
 
 type Server struct {
