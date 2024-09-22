@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"net/http"
 	"strings"
+  "encoding/json"
 
 	"github.com/zeidlitz/rudder/loadbalancer"
 )
@@ -63,6 +64,10 @@ func relay(w http.ResponseWriter, r *http.Request, destination string) {
     return
   }
   slog.Info("Response from server", "status code", resp.StatusCode)
+  // TODO: Make the response me actual response from the request, add err handling
+  response := map[string]string{"server": "running", "status": "200 OK"}
+	jsonResponse, err := json.Marshal(response)
+  w.Write(jsonResponse)
   defer resp.Body.Close()
 }
 
