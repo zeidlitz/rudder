@@ -15,14 +15,14 @@ type Server struct {
 }
 
 func (s *Server) loadBalanceHandler() http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		chosenServer, err := s.lb.GetServer()
+	return func(w http.ResponseWriter, clientRequest *http.Request) {
+		server, err := s.lb.GetServer()
 		if err != nil {
 			slog.Error("Internal error", "message", err.Error())
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 		}
-		slog.Info("Forwarding", "server", chosenServer)
-		relay(w, r, chosenServer)
+		slog.Info("Forwarding to", "server", server)
+		relay(w, clientRequest, server)
 	}
 }
 
@@ -39,32 +39,32 @@ func (s *Server) Configure(algorithm string, serverlist string) error {
 	return nil
 }
 
-func relay(w http.ResponseWriter, r *http.Request, destination string) {
-	url := destination + r.RequestURI
-	req, err := http.NewRequest(r.Method, url, r.Body)
+func relay(w http.ResponseWriter, clientRequest *http.Request, server string) {
+	url := server + clientRequest.RequestURI
+	serverRequest, err := http.NewRequest(clientRequest.Method, url, clientRequest.Body)
 	if err != nil {
 		slog.Error("Error when creating new request", "error", err.Error())
 		return
 	}
 
-	// Copy headers from original request to the new request
-	for key, values := range r.Header {
+	// Copy headers from client request to server reqeust
+	for key, values := range clientRequest.Header {
 		for _, value := range values {
-			req.Header.Add(key, value)
+			serverRequest.Header.Add(key, value)
 		}
 	}
 
-	slog.Info("Sending request", "request", req)
+	slog.Info("Sending ", "request", serverRequest)
 	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, err := client.Do(serverRequest)
 
 	if err != nil {
 		slog.Error("Error making request to the destination server", "error", err.Error())
 		http.Error(w, "Error making request to the destination server", http.StatusBadGateway)
 		return
 	}
+
 	slog.Info("Response from server", "status code", resp.StatusCode)
-	// TODO: Make the response me actual response from the request, add err handling
 	response := map[string]string{"server": "running", "status": "200 OK"}
 	jsonResponse, err := json.Marshal(response)
 	w.Write(jsonResponse)
