@@ -14,6 +14,8 @@ type LowestLatency struct {
 
 func getLatency(host string) (time.Duration, error) {
 	start := time.Now()
+  // TODO: Debug this. It's possible that the port needs to be interperted as int not a string 
+  // https://stackoverflow.com/questions/23079017/servname-not-supported-for-ai-socktype
 	conn, err := net.DialTimeout("tcp", host+":80", time.Millisecond)
 	if err != nil {
 		return 0, err

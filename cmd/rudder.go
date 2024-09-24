@@ -10,7 +10,8 @@ import (
 func main() {
 	serverlist := env.GetString("SERVERS", "server1, server2")
 	hostname := env.GetString("HOSTNAME", "localhost")
-	algorithm := env.GetString("ALGORITHM", "roundrobin")
+  //algorithm := env.GetString("ALGORITHM", "roundrobin")
+	algorithm := env.GetString("ALGORITHM", "lowestlatency")
 	port := env.GetString("PORT", "8080")
 
 	server := server.Server{}
