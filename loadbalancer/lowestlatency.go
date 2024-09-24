@@ -1,6 +1,7 @@
 package loadbalancer
 
 import (
+  "fmt"
 	"log/slog"
 	"net"
 	"time"
@@ -46,5 +47,10 @@ func (ll *LowestLatency) GetServer() (string, error) {
       lowestLatency = latency
     }
   }
+
+  if lowestLatencyServer == "" {
+    return "", fmt.Errorf("no reachable servers")
+  }
+
   return lowestLatencyServer, err
 }

@@ -12,7 +12,7 @@ func GetLoadBalancer(algorithm string, serverlist []string) (LoadBalancer, error
 	case "roundrobin":
 		return &RoundRobin{currentIndex: 0, servers: serverlist}, nil
 	case "iphash":
-		return &IPHash{servers: serverlist}, nil
+		return &LowestLatency{servers: serverlist}, nil
 	default:
 		return nil, fmt.Errorf("unknown load balancing algorithm: %s", algorithm)
 	}
