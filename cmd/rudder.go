@@ -17,7 +17,7 @@ func main() {
 	server := server.Server{}
 	host := fmt.Sprint(hostname + ":" + port)
 	server.Configure(algorithm, serverlist)
-	slog.Info("Rudder is running!⚓")
+	slog.Info("Rudder is running!")
 	slog.Info("configuration", "serverlist", serverlist, "hostname", hostname, "port", port, "algorithm", algorithm)
 	server.Start(host)
 }
