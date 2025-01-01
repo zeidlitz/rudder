@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"io"
 	"log/slog"
 	"net/http"
 	"strings"
@@ -47,7 +48,6 @@ func relay(w http.ResponseWriter, clientRequest *http.Request, server string) {
 		return
 	}
 
-	// Copy headers from client request to server reqeust
 	for key, values := range clientRequest.Header {
 		for _, value := range values {
 			serverRequest.Header.Add(key, value)
@@ -64,10 +64,30 @@ func relay(w http.ResponseWriter, clientRequest *http.Request, server string) {
 		return
 	}
 
-	slog.Info("Response from server", "status code", resp.StatusCode)
-	response := map[string]string{"server": "running", "status": "200 OK"}
-	jsonResponse, err := json.Marshal(response)
-	w.Write(jsonResponse)
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		slog.Error("Error reading response body: ", "err", err)
+		http.Error(w, "Error reading resposne body", http.StatusInternalServerError)
+		return
+	}
+
+	var data map[string]interface{}
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		slog.Error("Error unmarshalling response body JSON: ", "err", err)
+		http.Error(w, "Error unrmarshalling resposne body JSON", http.StatusInternalServerError)
+		return
+	}
+
+	slog.Info("Response from ", "server", server, "response", data)
+	relayResponse, err := json.Marshal(data)
+	if err != nil {
+		slog.Error("Error marshalling response body JSON: ", "err", err)
+		http.Error(w, "Error marshalling resposne body JSON", http.StatusInternalServerError)
+		return
+	}
+	w.Write(relayResponse)
+
 	defer resp.Body.Close()
 }
 

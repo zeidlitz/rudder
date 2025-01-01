@@ -2,16 +2,16 @@ package main
 
 import (
 	"fmt"
+	"log/slog"
+
 	"github.com/zeidlitz/rudder/internal/env"
 	"github.com/zeidlitz/rudder/internal/server"
-	"log/slog"
 )
 
 func main() {
-	serverlist := env.GetString("SERVERS", "server1, server2")
+	serverlist := env.GetString("SERVERS", "http://34.88.120.114")
 	hostname := env.GetString("HOSTNAME", "localhost")
-	//algorithm := env.GetString("ALGORITHM", "roundrobin")
-	algorithm := env.GetString("ALGORITHM", "lowestlatency")
+	algorithm := env.GetString("ALGORITHM", "roundrobin")
 	port := env.GetString("PORT", "8080")
 
 	server := server.Server{}
